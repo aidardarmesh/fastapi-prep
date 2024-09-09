@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  app:
+    image: fastapi
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - es
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.22
+    container_name: es
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
