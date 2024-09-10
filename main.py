@@ -2,7 +2,6 @@ import sys, time
 
 from fastapi import FastAPI
 from elasticsearch import Elasticsearch, exceptions
-from pydantic import BaseModel
 
 
 app = FastAPI()
@@ -12,10 +11,6 @@ ES_INDEX = "user_data"
 # phone, id, first_name, last_name, gender
 FB_PROFILE_URL = f"https://www.facebook.com/profile.php?id={id}"
 FB_DATA_DIR = "./data/fb.txt"
-
-
-class SearchQuery(BaseModel):
-    query: str
 
 
 def check_index(index: str, retry: int = 5):
@@ -69,14 +64,14 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/search")
-async def search(q: SearchQuery):
+@app.get("/search")
+async def search(q: str):
     return es.search(
         index=ES_INDEX,
         body={
             "query": {
                 "match": {
-                    "phone_number": q.query
+                    "phone_number": q
                 }
             }
         }
