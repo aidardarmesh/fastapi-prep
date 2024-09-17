@@ -37,7 +37,6 @@ def check_index(index: str, retry: int = 5):
         check_index(index, retry - 1)
 
 
-@app.on_event("startup")
 def load_bulk_data():
     """loads bulk user data if connected to ES before application starts"""
     check_index(ES_INDEX)
@@ -76,3 +75,7 @@ async def search(q: str):
             }
         }
     )
+
+
+if __name__ == "__main__":
+    load_bulk_data()
